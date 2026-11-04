@@ -1,0 +1,91 @@
+name: WatchMouse
+options:
+  bundleIdPrefix: com.gptsmotion
+  developmentLanguage: zh-Hans
+  deploymentTarget:
+    watchOS: "11.0"
+packages:
+  WatchMousePackage:
+    path: .
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+  configs:
+    # 真机调试用个人团队，TestFlight 只能用付费团队。
+    Debug:
+      DEVELOPMENT_TEAM: BDC27ZWT45
+    Release:
+      DEVELOPMENT_TEAM: DLKMC3ZRZQ
+targets:
+  WatchMouse:
+    type: application
+    platform: watchOS
+    sources:
+      - WatchApp
+    dependencies:
+      - package: WatchMousePackage
+        product: WatchMouseCore
+    info:
+      path: WatchApp/Info.plist
+      properties:
+        CFBundleDisplayName: WatchMouse
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        WKApplication: true
+        WKWatchOnly: true
+        NSMotionUsageDescription: 读取手腕转动，用来移动 Mac 的光标。
+        NSBluetoothAlwaysUsageDescription: 通过蓝牙把手腕转动发送给你的 Mac。
+        WKBackgroundModes:
+          - physical-therapy
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "4"
+        SKIP_INSTALL: YES
+        GENERATE_INFOPLIST_FILE: NO
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.chening.watchmouse.watchkitapp
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: com.gptsmotion.watchmouse.watchkitapp
+  WatchMouseDistribution:
+    type: application.watchapp2-container
+    platform: iOS
+    deploymentTarget: "17.0"
+    dependencies:
+      - target: WatchMouse
+        embed: true
+    info:
+      path: Release/Container-Info.plist
+      properties:
+        CFBundleDisplayName: WatchMouse
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSWatchOnlyContainer: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_NAME: WatchMouse
+        PRODUCT_BUNDLE_IDENTIFIER: com.gptsmotion.watchmouse
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SKIP_INSTALL: NO
+schemes:
+  WatchMouse:
+    build:
+      targets:
+        WatchMouse: [run, test, profile, analyze]
+        WatchMouseDistribution: [archive]
+    run:
+      config: Debug
+    archive:
+      config: Release
