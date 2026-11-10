@@ -33,7 +33,7 @@ struct ContentView: View {
             Text(controller.linkText)
                 .font(.footnote)
                 .multilineTextAlignment(.center)
-            Button(controller.isRunning ? "暂停光标" : "开始光标") {
+            Button(controller.isRunning ? "Pause Cursor" : "Start Cursor") {
                 controller.toggle()
             }
             .tint(controller.isRunning ? .orange : .green)
@@ -71,7 +71,7 @@ struct CaptureListView: View {
                             Text(run.title)
                             Text(run.instruction).font(.caption2).foregroundStyle(.secondary)
                             if let done = capture.completedCounts[run.id] {
-                                Text("已录 \(done) 轮").font(.caption2).foregroundStyle(.green)
+                                Text("Recorded \(done)×").font(.caption2).foregroundStyle(.green)
                             }
                         }
                     }
@@ -95,9 +95,9 @@ struct CaptureRunView: View {
                 .multilineTextAlignment(.center)
             HStack {
                 if case .cued = run.kind {
-                    Button("作废") { capture.markLastInvalid() }.tint(.orange)
+                    Button("Discard") { capture.markLastInvalid() }.tint(.orange)
                 }
-                Button("结束") { capture.finish() }
+                Button("End") { capture.finish() }
             }
         }
     }

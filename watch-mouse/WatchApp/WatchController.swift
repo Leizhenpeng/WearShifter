@@ -12,7 +12,7 @@ import simd
 final class WatchController: NSObject, ObservableObject {
     @Published private(set) var isConnected = false
     @Published private(set) var isRunning = false
-    @Published private(set) var linkText = "正在查找 Mac"
+    @Published private(set) var linkText = "Looking for Mac"
     @Published private(set) var detailText = ""
 
     private let queue = DispatchQueue(label: "watchmouse.link", qos: .userInteractive)
@@ -57,11 +57,11 @@ final class WatchController: NSObject, ObservableObject {
 
     private func start() {
         guard !motion.isDeviceMotionActive else {
-            detailText = "正在采集，结束后才能开始光标"
+            detailText = "Capture in progress. End it to start the cursor."
             return
         }
         guard motion.isDeviceMotionAvailable else {
-            detailText = "这台手表没有运动数据"
+            detailText = "Motion data unavailable on this watch."
             return
         }
         // 必须在前台启动。没有它抬腕结束后应用就被挂起，运动数据和蓝牙都会停。
@@ -127,7 +127,7 @@ final class WatchController: NSObject, ObservableObject {
 
     private func publishStats(now: TimeInterval) {
         guard now - secondStartedAt >= 1 else { return }
-        let text = "采样 \(samplesThisSecond) Hz · 发送 \(sentThisSecond) Hz · 拥塞 \(blockedThisSecond)"
+        let text = "Motion \(samplesThisSecond) Hz · Sent \(sentThisSecond) Hz · Busy \(blockedThisSecond)"
         secondStartedAt = now
         samplesThisSecond = 0
         sentThisSecond = 0
@@ -147,7 +147,7 @@ final class WatchController: NSObject, ObservableObject {
     private func beginSearch() {
         guard central.state == .poweredOn, characteristic == nil else { return }
         if searchStartedAt == nil { searchStartedAt = Date() }
-        setLink("正在查找 Mac", connected: false)
+        setLink("Looking for Mac", connected: false)
         central.scanForPeripherals(withServices: [CBUUID(string: WatchMouseBLE.serviceUUID)])
         if let known = peripheral ?? rememberedPeripheral() { attach(known) }
         watchSearch()
@@ -202,13 +202,13 @@ extension WatchController: CBCentralManagerDelegate, CBPeripheralDelegate {
         case .poweredOn:
             beginSearch()
         case .unauthorized:
-            setLink("请在设置里允许蓝牙", connected: false)
+            setLink("Allow Bluetooth in Settings", connected: false)
         case .poweredOff:
             characteristic = nil
-            setLink("蓝牙已关闭", connected: false)
+            setLink("Bluetooth is off", connected: false)
         default:
             characteristic = nil
-            setLink("蓝牙不可用", connected: false)
+            setLink("Bluetooth unavailable", connected: false)
         }
     }
 
@@ -252,7 +252,7 @@ extension WatchController: CBCentralManagerDelegate, CBPeripheralDelegate {
         self.characteristic = characteristic
         let elapsed = searchStartedAt.map { Date().timeIntervalSince($0) } ?? 0
         searchStartedAt = nil
-        setLink(String(format: "已连接 Mac（%.1f 秒）", elapsed), connected: true)
+        setLink(String(format: "Connected to Mac (%.1f s)", elapsed), connected: true)
     }
 
     /// Mac 端应用重启后服务会失效，要断开重新发现。
@@ -277,7 +277,7 @@ extension WatchController: WKExtendedRuntimeSessionDelegate {
         DispatchQueue.main.async {
             guard self.runtimeSession === session else { return }
             self.stop()
-            self.detailText = "运行会话结束：\(reason.rawValue) \(error?.localizedDescription ?? "")"
+            self.detailText = "Session ended (\(reason.rawValue)) \(error?.localizedDescription ?? "")"
         }
     }
 }

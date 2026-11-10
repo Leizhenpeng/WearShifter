@@ -15,15 +15,15 @@ public struct CaptureRun: Identifiable, Equatable {
     /// 手势轮和“只震动”轮都用同样的提示。后者提供带震动但没有手势的样本，
     /// 否则分类器可能学到“有震动就是手势”，分数会虚高。
     public static let plan: [CaptureRun] = [
-        CaptureRun(id: "clench_still", title: "抓握·静止", instruction: "震动后默数一下，握拳一次再松开，手臂不动", kind: .cued(count: 30)),
-        CaptureRun(id: "clench_move", title: "抓握·移动", instruction: "手腕像控制光标一样慢慢转，震动后默数一下，握拳一次", kind: .cued(count: 20)),
-        CaptureRun(id: "double_still", title: "连续抓握·静止", instruction: "震动后默数一下，连续握拳两次，手臂不动", kind: .cued(count: 30)),
-        CaptureRun(id: "double_move", title: "连续抓握·移动", instruction: "手腕慢慢转，震动后默数一下，连续握拳两次", kind: .cued(count: 20)),
-        CaptureRun(id: "open_still", title: "张开·静止", instruction: "手自然放松，震动后默数一下，张开五指再放松，手臂不动", kind: .cued(count: 30)),
-        CaptureRun(id: "open_move", title: "张开·移动", instruction: "手腕慢慢转，震动后默数一下，张开五指再放松", kind: .cued(count: 20)),
-        CaptureRun(id: "cue_only", title: "只震动", instruction: "手臂不动，感到震动也不做任何手势", kind: .cued(count: 30)),
-        CaptureRun(id: "move_only", title: "只移动", instruction: "像控制光标一样转手腕，不做任何手势", kind: .timed(seconds: 180)),
-        CaptureRun(id: "daily", title: "日常操作", instruction: "打字、用触控板、拿东西，不刻意做手势，可以提前结束", kind: .timed(seconds: 1_800))
+        CaptureRun(id: "clench_still", title: "Clench · Still", instruction: "After the tap, count one, then make a fist once and release. Keep your arm still.", kind: .cued(count: 30)),
+        CaptureRun(id: "clench_move", title: "Clench · Moving", instruction: "Slowly turn your wrist as if moving the cursor. After the tap, count one, then make a fist once.", kind: .cued(count: 20)),
+        CaptureRun(id: "double_still", title: "Double Clench · Still", instruction: "After the tap, count one, then make a fist twice. Keep your arm still.", kind: .cued(count: 30)),
+        CaptureRun(id: "double_move", title: "Double Clench · Moving", instruction: "Slowly turn your wrist. After the tap, count one, then make a fist twice.", kind: .cued(count: 20)),
+        CaptureRun(id: "open_still", title: "Open Hand · Still", instruction: "Relax your hand. After the tap, count one, then spread your fingers and relax. Keep your arm still.", kind: .cued(count: 30)),
+        CaptureRun(id: "open_move", title: "Open Hand · Moving", instruction: "Slowly turn your wrist. After the tap, count one, then spread your fingers and relax.", kind: .cued(count: 20)),
+        CaptureRun(id: "cue_only", title: "Taps Only", instruction: "Keep your arm still. Don't gesture when you feel the tap.", kind: .cued(count: 30)),
+        CaptureRun(id: "move_only", title: "Moving Only", instruction: "Turn your wrist as if moving the cursor. Don't make any gestures.", kind: .timed(seconds: 180)),
+        CaptureRun(id: "daily", title: "Everyday Use", instruction: "Type, use the trackpad, pick things up. Don't gesture on purpose. You can end early.", kind: .timed(seconds: 1_800))
     ]
 }
 

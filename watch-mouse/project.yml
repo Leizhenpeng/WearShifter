@@ -1,7 +1,7 @@
 name: WatchMouse
 options:
   bundleIdPrefix: com.gptsmotion
-  developmentLanguage: zh-Hans
+  developmentLanguage: en
   deploymentTarget:
     watchOS: "11.0"
 packages:
@@ -37,8 +37,10 @@ targets:
         ITSAppUsesNonExemptEncryption: false
         WKApplication: true
         WKWatchOnly: true
-        NSMotionUsageDescription: 读取手腕转动，用来移动 Mac 的光标。
-        NSBluetoothAlwaysUsageDescription: 通过蓝牙把手腕转动发送给你的 Mac。
+        NSMotionUsageDescription: WatchMouse reads your wrist movement to move the cursor on your Mac.
+        NSBluetoothAlwaysUsageDescription: WatchMouse sends your wrist movement to your Mac over Bluetooth.
+        CFBundleLocalizations:
+          - en
         WKBackgroundModes:
           - physical-therapy
     settings:

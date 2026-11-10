@@ -41,16 +41,16 @@ final class CaptureController: NSObject, ObservableObject {
     func start(_ run: CaptureRun) {
         let manager = SharedMotion.manager
         guard manager.isDeviceMotionAvailable, !manager.isDeviceMotionActive else {
-            errorText = "运动数据不可用，请先暂停光标"
+            errorText = "Motion unavailable. Pause the cursor first."
             return
         }
         guard let files = openFiles(for: run) else {
-            errorText = "无法创建采集文件"
+            errorText = "Couldn't create capture files."
             return
         }
         errorText = nil
         activeRun = run
-        progressText = "准备"
+        progressText = "Get ready"
         // 要在手腕放下、屏幕熄灭后继续采集和震动。
         let session = WKExtendedRuntimeSession()
         session.delegate = self
@@ -137,7 +137,7 @@ final class CaptureController: NSObject, ObservableObject {
         case nil:
             if case let .timed(seconds) = run.kind, bufferedLines == 0, let startedAt {
                 let left = Int(seconds - (sample.timestamp - startedAt))
-                DispatchQueue.main.async { self.progressText = "剩余 \(left / 60) 分 \(left % 60) 秒" }
+                DispatchQueue.main.async { self.progressText = String(format: "%d:%02d left", left / 60, left % 60) }
             }
         }
     }
@@ -200,7 +200,7 @@ extension CaptureController: WKExtendedRuntimeSessionDelegate {
     func extendedRuntimeSession(_ session: WKExtendedRuntimeSession, didInvalidateWith reason: WKExtendedRuntimeSessionInvalidationReason, error: Error?) {
         DispatchQueue.main.async {
             guard self.runtimeSession === session else { return }
-            self.errorText = "运行会话结束：\(reason.rawValue)，这一轮到此为止"
+            self.errorText = "Session ended (\(reason.rawValue)). This run stopped."
             self.finish()
         }
     }
