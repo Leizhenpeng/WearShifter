@@ -3,12 +3,14 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-swift build -c release --product WatchMouseMac
+# 同时支持 Apple 芯片和 Intel。
+BUILD_ARGS=(-c release --arch arm64 --arch x86_64)
+swift build "${BUILD_ARGS[@]}" --product WatchMouseMac
 
 APP=build/WatchMouse.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS"
-cp "$(swift build -c release --show-bin-path)/WatchMouseMac" "$APP/Contents/MacOS/WatchMouse"
+cp "$(swift build "${BUILD_ARGS[@]}" --show-bin-path)/WatchMouseMac" "$APP/Contents/MacOS/WatchMouse"
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
